@@ -1,0 +1,9 @@
+mncmp() is a simple function using the python NLTK library that attempts to determine whether its first and second natural-language arguments have (approximately) the same meaning. For now, the function mainly uses wordnet.path_similarity to "cross-off" words which have roughly the same meaning/some close relation. This is of course very primitive but for simple sentences it works quite well.
+
+Usage : mncmp(argument_1,argument_2), argument_1 and argument_2 being raw text data (==strings, not processed with nltk.word_tokenize etc., this is done inside the function)
+
+Return value : True if the meanings were determined to be approximately the same, False otherwise.
+
+
+Feel free to use and develop this in your open source projects; it is provided under the GNU GPL v3 License. Patches are welcome!
+(c) Jan Dlabal (http://houbysoft.com), 2010.
