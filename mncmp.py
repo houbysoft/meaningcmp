@@ -38,11 +38,14 @@ def mncmp(s1,s2):
                 pass
             for synset1 in item1:
                 for synset2 in item2:
-                    if wn.path_similarity(synset1,synset2) >= min_sim:
-                        s1_counter.remove(item1)
-                        s2_counter.remove(item2)
-                        stop = True
-                        break
+                    try:
+                        if wn.path_similarity(synset1,synset2) >= min_sim:
+                            s1_counter.remove(item1)
+                            s2_counter.remove(item2)
+                            stop = True
+                            break
+                    except:
+                        pass
                 if stop:
                     break
             if stop:
