@@ -1,3 +1,14 @@
+INSTALL
+=======
+This project depends on the python nltk library (http://nltk.org).
+ArchLinux users should install python-nltk from AUR (for other distributions, a similar package should be available), and then run:
+$ python
+>>> import nltk
+>>> nltk.download('book')
+This will download the necessary nltk collection.
+To use mncmp(), launch a python interpreter, and then simply import the mncmp function.
+To use pretzel, run "./pretzel.py" or "python pretzel.py" from a command-line (to exit the pretzel prompt, type exit).
+
 MNCMP
 =====
 mncmp() is a simple function using the python NLTK library that attempts to determine whether its first and second natural-language arguments have (approximately) the same meaning. For now, the function mainly uses wordnet.path_similarity to "cross-off" words which have roughly the same meaning/some close relation. This is of course very primitive but for simple sentences it works quite well.
@@ -10,11 +21,14 @@ Return value : True if the meanings were determined to be approximately the same
 PRETZEL
 =======
 Pretzel is a simple wrapper around mncmp() creating the illusion of an Artificial Intelligence assistant. It was inspired by Lexion's Cookie (bbs.archlinux.org), but it focuses mainly on identifying similar meanings with the mncmp() function rather than providing many functions (these can be added easily later anyway).
-Therefore, Pretzel has only two modes of "responding" as of now:
+Therefore, Pretzel has only three modes of "responding" as of now:
   - simple text response
-  - the running of a shell command (in the background)
-To teach Pretzel something new, simply enter the sentence which should trigger the new action, and then enter the appropriate command; either the text of a simple text reply or /shell command args for running command with args (in the background, a & is automatically appended).
+  - the running of a shell command with /shell
+  - direct execution of python code with /python
+To teach Pretzel something new, simply enter the sentence which should trigger the new action, and then enter the appropriate command; either the text of a simple text reply or /shell command args for running command with args, or /python <python commands> for running python commands directly in Pretzel.
 
 
+CREDITS & LICENSE
+=================
 Feel free to use and develop this in your open source projects; it is provided under the GNU GPL v3 License. Patches are welcome!
 (c) Jan Dlabal (http://houbysoft.com), 2010.
