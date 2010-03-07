@@ -30,7 +30,7 @@ class Pretzel:
             self.pretzel_keys.append(['how are you','fine, thanks'])
             self.pretzel_keys.append(['exit','exit'])
             self.pretzel_keys.append(['quit','quit'])
-            print "[failed] (new database will be created after a clean exit)"
+            print "[failed] (new database will be created in pretzel.dat after a clean exit (type exit to do that))"
         print "Initializing mncmp()... ",
         stdout.flush()
         mncmp("doors","walls") # need to pass anything through it once so that the wordnet dictionnaries get loaded etc.
@@ -51,7 +51,7 @@ class Pretzel:
             return
         if cmd[0]=='/':
             if cmd[1:6]=='shell':
-                system(cmd[6:]+"&")
+                system(cmd[6:])
         else:
             print cmd
 
@@ -70,7 +70,11 @@ class Pretzel:
                         self.execute(item[1])
                     break
             if not success:
-                self.pretzel_keys.append([user,self.panic()])
+                cmd = self.panic()
+                if cmd!="":
+                    self.pretzel_keys.append([user,cmd])
+                else:
+                    print "Received empty input; not adding to database."
 
         self.flushdb()
 
