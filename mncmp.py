@@ -54,6 +54,21 @@ def mncmp(s1,s2):
     if len(s1_counter)==0 and len(s2_counter)==0:
         return True
     else:
+        if len(s1_counter)==len(s2_counter):
+            args = []
+            for i in range(0,len(s2_counter)):
+                try:
+                    if s2_counter[i][0]=='!' and s2_counter[i][1][0:3]=='arg':
+                        x = int(s2_counter[i][1][3:]) - 1
+                        if x + 1 > len(args):
+                            for j in range(len(args),x + 1):
+                                args.append('')
+                        args[x] = s1_tokenized[s1_ssets.index(s1_counter[i])]
+                    else:
+                        return False
+                except:
+                    return False
+            return args
         return False
 
 

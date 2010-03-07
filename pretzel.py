@@ -64,12 +64,21 @@ class Pretzel:
             user = raw_input("> ")
             success = False
             for item in self.pretzel_keys:
-                if mncmp(user,item[0]):
+                args = mncmp(user,item[0])
+                itemtmp = item[1]
+                if args is not False:
+                    if args is not True:
+                        # means we have some arguments
+                        for x in range(0,len(args)):
+                            try:
+                                itemtmp = itemtmp.replace('arg'+repr(x+1),args[x])
+                            except:
+                                pass
                     success = True
-                    if item[1]=='exit':
+                    if itemtmp=='exit':
                         die = True
                     else:
-                        self.execute(item[1])
+                        self.execute(itemtmp)
                     break
             if not success:
                 cmd = self.panic()
