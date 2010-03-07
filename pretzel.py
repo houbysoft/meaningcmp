@@ -44,7 +44,7 @@ class Pretzel:
 
     def panic(self):
         print "I don't know what to do!"
-        return raw_input("Please enter desired response (enter text for text reply, or /shell command args to run command with args as response): ")
+        return raw_input("Please enter desired response (simple text, /shell command, or /python command): ")
 
     def execute(self,cmd):
         if len(cmd)==0:
