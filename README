@@ -26,6 +26,14 @@ Therefore, Pretzel has only three modes of "responding" as of now:
   - the running of a shell command with /shell
   - direct execution of python code with /python
 To teach Pretzel something new, simply enter the sentence which should trigger the new action, and then enter the appropriate command; either the text of a simple text reply or /shell command args for running command with args, or /python <python commands> for running python commands directly in Pretzel.
+You can also use simple arguments by inserting arg1, arg2, ... in the query when you first teach it to pretzel, and entering the same arg1, arg2, ... in the command to run. Be warned though; this does not yet work well (mainly for filenames including dots) because of the way nltk tokenizes the string. Also, you can only use one word for each argument as of now.
+Example for installing a package under archlinux:
+> install arg1
+I don't know what to do!
+Please enter desired response (enter text for text reply, or /shell command args to run command with args as response): /shell sudo pacman -S arg1
+> install emacs
+Password: 
+[installation begins...]
 
 
 CREDITS & LICENSE
