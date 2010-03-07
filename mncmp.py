@@ -20,11 +20,17 @@ def mncmp(s1,s2):
         return False
     stop = False
     for item1 in s1_ssets:
-        if item1 not in s1_counter:
-            continue
-        for item2 in s2_ssets:
-            if item2 not in s2_counter:
+        try:
+            if item1 not in s1_counter:
                 continue
+        except:
+            pass
+        for item2 in s2_ssets:
+            try:
+                if item2 not in s2_counter:
+                    continue
+            except:
+                pass
             try:
                 if item1[0]=='!' or item2[0]=='!' or s1_postags[s1_ssets.index(item1)][1]=="NNP" or s2_postags[s2_ssets.index(item2)][1]=="NNP": # in this case, we want a perfect match
                     if s1_tokenized[s1_ssets.index(item1)] == s2_tokenized[s2_ssets.index(item2)]:
