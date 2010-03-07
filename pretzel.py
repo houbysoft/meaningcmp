@@ -50,8 +50,10 @@ class Pretzel:
         if len(cmd)==0:
             return
         if cmd[0]=='/':
-            if cmd[1:6]=='shell':
-                system(cmd[6:])
+            if cmd[1:7]=='shell ':
+                system(cmd[7:])
+            elif cmd[1:8]=='python ':
+                exec(cmd[8:])
         else:
             print cmd
 
