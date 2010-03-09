@@ -6,10 +6,16 @@ from mncmp import mncmp
 from sys import argv
 from sys import stdout
 from os import system
+import readline
+from cmd import Cmd
 
-class Pretzel:
+class Pretzel(Cmd):
     def __init__(self):
         self.pretzel_keys = []
+        self.prompt = '> '
+        self.completekey = None
+        self.cmdqueue = []
+        self.stop = False
         print "Loading data... ",
         stdout.flush()
         try:
@@ -19,7 +25,7 @@ class Pretzel:
                 self.datafile = "pretzel.dat"
             f = open(self.datafile)
             str = f.readline()
-            while str:
+            while str and len(str) is not 0:
                 if str[-1]=='\n':
                     str = str[:-1]
                 self.pretzel_keys.append([str[:str.find(':')],str[str.find(':')+1:]])
@@ -49,6 +55,9 @@ class Pretzel:
     def execute(self,cmd):
         if len(cmd)==0:
             return
+        if cmd=='exit' or cmd=='quit':
+            self.stop = True
+            return
         if cmd[0]=='/':
             if cmd[1:7]=='shell ':
                 system(cmd[7:])
@@ -57,37 +66,33 @@ class Pretzel:
         else:
             print cmd
 
-    def main(self):
-        die = False
+    def postcmd(self, stop, line):
+        return self.stop
 
-        while not die:
-            user = raw_input("> ")
-            success = False
-            for item in self.pretzel_keys:
-                args = mncmp(user,item[0])
-                itemtmp = item[1]
-                if args is not False:
-                    if args is not True:
-                        # means we have some arguments
-                        for x in range(0,len(args)):
-                            try:
-                                itemtmp = itemtmp.replace('arg'+repr(x+1),args[x])
-                            except:
-                                pass
-                    success = True
-                    if itemtmp=='exit':
-                        die = True
-                    else:
-                        self.execute(itemtmp)
-                    break
-            if not success:
-                cmd = self.panic()
-                if cmd!="":
-                    self.pretzel_keys.append([user,cmd])
-                else:
-                    print "Received empty input; not adding to database."
+    def default(self, user):
+        success = False
+        for item in self.pretzel_keys:
+            args = mncmp(user,item[0])
+            itemtmp = item[1]
+            if args is not False:
+                if args is not True:
+                    # means we have some arguments
+                    for x in range(0,len(args)):
+                        try:
+                            itemtmp = itemtmp.replace('arg'+repr(x+1),args[x])
+                        except:
+                            pass
+                success = True
+                self.execute(itemtmp)
+                break
+        if not success:
+            cmd = self.panic()
+            if cmd!="":
+                self.pretzel_keys.append([user,cmd])
+            else:
+                print "Received empty input; not adding to database."
 
         self.flushdb()
 
 p = Pretzel()        
-p.main()
+p.cmdloop()
