@@ -16,6 +16,7 @@ class Pretzel(Cmd):
         self.completekey = None
         self.cmdqueue = []
         self.stop = False
+        self.stdout = stdout
         print "Loading data... ",
         stdout.flush()
         try:
@@ -68,6 +69,9 @@ class Pretzel(Cmd):
 
     def postcmd(self, stop, line):
         return self.stop
+
+    def do_help(self, args):
+        self.default('help '+args)
 
     def default(self, user):
         success = False
