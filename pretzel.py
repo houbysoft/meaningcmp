@@ -17,6 +17,7 @@ class Pretzel(Cmd):
         self.cmdqueue = []
         self.stop = False
         self.stdout = stdout
+        self.minsim = 0.34
         print "Loading data... ",
         stdout.flush()
         try:
@@ -76,7 +77,7 @@ class Pretzel(Cmd):
     def default(self, user):
         success = False
         for item in self.pretzel_keys:
-            args = mncmp(user,item[0])
+            args = mncmp(user,item[0],self.minsim)
             itemtmp = item[1]
             if args is not False:
                 if args is not True:

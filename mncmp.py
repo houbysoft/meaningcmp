@@ -5,9 +5,7 @@
 import nltk
 from nltk.corpus import wordnet as wn
 
-min_sim = 0.33
-
-def mncmp(s1,s2):
+def mncmp(s1,s2,min_sim=0.31):
     s1_tokenized = nltk.word_tokenize(s1)
     s2_tokenized = nltk.word_tokenize(s2)
     s1_postags = nltk.pos_tag(s1_tokenized)
