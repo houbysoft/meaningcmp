@@ -5,7 +5,7 @@ ArchLinux users should install python-nltk from AUR (for other distributions, a 
 $ python
 >>> import nltk
 >>> nltk.download('book')
-This will download the necessary nltk collection.
+This will download the necessary nltk collection. Other collections (for languages other than English, for instance) may be found in http://nltk.googlecode.com/svn/trunk/nltk_data/index.xml
 To use mncmp(), launch a python interpreter, and then simply import the mncmp function.
 To use pretzel, run "./pretzel.py" or "python pretzel.py" from a command-line (to exit the pretzel prompt, type exit).
 
@@ -13,7 +13,9 @@ MNCMP
 =====
 mncmp() is a simple function using the python NLTK library that attempts to determine whether its first and second natural-language arguments have (approximately) the same meaning. For now, the function mainly uses wordnet.path_similarity to "cross-off" words which have roughly the same meaning/some close relation. This is of course very primitive but for simple sentences it works quite well.
 
-Usage : mncmp(argument_1,argument_2), argument_1 and argument_2 being raw text data (==strings, not processed with nltk.word_tokenize etc., this is done inside the function)
+Similarity detection threshold is defined by the self.minisim value, with lower values implying lower requirements for similarity detection.
+
+Usage : mncmp(argument_1,argument_2, min_sim), argument_1 and argument_2 being raw text data (==strings, not processed with nltk.word_tokenize etc., this is done inside the function). min_sim defines the similarity detection threshold.
 
 Return value : True if the meanings were determined to be approximately the same, False otherwise.
 
