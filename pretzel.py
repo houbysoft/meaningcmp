@@ -74,29 +74,37 @@ class Pretzel(Cmd):
     def do_help(self, args):
         self.default('help '+args)
 
-    def default(self, user):
+    def arg_translate(self, arg, recursive=False):
         success = False
         for item in self.pretzel_keys:
-            args = mncmp(user,item[0],self.minsim)
+            args = mncmp(arg,item[0],self.minsim)
             itemtmp = item[1]
             if args is not False:
                 if args is not True:
                     # means we have some arguments
                     for x in range(0,len(args)):
                         try:
-                            itemtmp = itemtmp.replace('arg'+repr(x+1),args[x])
+                            itemtmp = itemtmp.replace('arg'+repr(x+1),self.arg_translate(args[x],True))
                         except:
                             pass
                 success = True
-                self.execute(itemtmp)
+                if not recursive:
+                    self.execute(itemtmp)
+                else:
+                    return itemtmp
                 break
         if not success:
-            cmd = self.panic()
-            if cmd!="":
-                self.pretzel_keys.append([user,cmd])
+            if recursive:
+                return arg
             else:
-                print "Received empty input; not adding to database."
+                cmd = self.panic()
+                if cmd!="":
+                    self.pretzel_keys.append([arg,cmd])
+                else:
+                    print "Received empty input; not adding to database."
 
+    def default(self, user):
+        self.arg_translate(user)
         self.flushdb()
 
 p = Pretzel()        
