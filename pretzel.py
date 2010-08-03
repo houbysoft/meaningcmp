@@ -2,7 +2,7 @@
 # (c) Jan Dlabal (http://houbysoft.com), 2010.
 # provided under the GNU GPL v3 License.
 
-from mncmp import mncmp
+from argmatch import *
 from sys import argv
 from sys import stdout
 from os import system
@@ -11,7 +11,7 @@ from cmd import Cmd
 
 class Pretzel(Cmd):
     def __init__(self):
-        self.pretzel_keys = []
+        self.models = []
         self.prompt = '> '
         self.completekey = None
         self.cmdqueue = []
@@ -30,24 +30,24 @@ class Pretzel(Cmd):
             while str and len(str) is not 0:
                 if str[-1]=='\n':
                     str = str[:-1]
-                self.pretzel_keys.append([str[:str.find(':')],str[str.find(':')+1:]])
+                self.models.append([Model(str[:str.find(':')]),str[str.find(':')+1:]])
                 str = f.readline()
             print "[done]"
         except:
-            self.pretzel_keys.append(['hello','hi'])
-            self.pretzel_keys.append(['how are you','fine, thanks'])
-            self.pretzel_keys.append(['exit','exit'])
-            self.pretzel_keys.append(['quit','quit'])
+            self.models.append([Model('hello'),'hi'])
+            self.models.append([Model('how are you'),'fine, thanks'])
+            self.models.append([Model('exit'),'exit'])
+            self.models.append([Model('quit'),'quit'])
             print "[failed] (new database will be created in pretzel.dat after a clean exit (type exit to do that))"
-        print "Initializing mncmp()... ",
+        print "Initializing argmatch()... ",
         stdout.flush()
-        mncmp("doors","walls") # need to pass anything through it once so that the wordnet dictionnaries get loaded etc.
+        argmatch(Model("doors"),"walls") # need to pass anything through it once so that the wordnet dictionnaries get loaded etc.
         print "[done]"
 
     def flushdb(self):
         f = open(self.datafile,"w")
-        for item in self.pretzel_keys:
-            f.write(item[0]+":"+item[1]+"\n")
+        for item in self.models:
+            f.write(item[0].getsentence()+":"+item[1]+"\n")
         f.close()
 
     def panic(self):
@@ -76,17 +76,15 @@ class Pretzel(Cmd):
 
     def arg_translate(self, arg, recursive=False):
         success = False
-        for item in self.pretzel_keys:
-            args = mncmp(arg,item[0],self.minsim)
+        for item in self.models:
+            args = argmatch(item[0],arg) #mncmp(arg,item[0],self.minsim)
             itemtmp = item[1]
             if args is not False:
                 if args is not True:
                     # means we have some arguments
-                    for x in range(0,len(args)):
-                        try:
-                            itemtmp = itemtmp.replace('arg'+repr(x+1),self.arg_translate(args[x],True))
-                        except:
-                            pass
+                    for arg in args:
+                        itemtmp = itemtmp.replace(arg[0],arg[1])
+                        #itemtmp = itemtmp.replace('arg'+repr(x+1),self.arg_translate(args[x],True))
                 success = True
                 if not recursive:
                     self.execute(itemtmp)
@@ -99,7 +97,7 @@ class Pretzel(Cmd):
             else:
                 cmd = self.panic()
                 if cmd!="":
-                    self.pretzel_keys.append([arg,cmd])
+                    self.models.append([Model(arg),cmd])
                 else:
                     print "Received empty input; not adding to database."
 

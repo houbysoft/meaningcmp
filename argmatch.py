@@ -12,6 +12,9 @@ class Model():
         self.els = self.tokenize(sentence)
         self.args = filter(lambda el : el[0]=='`',self.els)
 
+    def getsentence(self):
+        return ljoin(self.els)
+
     def tokenize(self,s):
         return s.split(" ")
 
@@ -26,6 +29,15 @@ class Model():
                 return compare(self.els[relpos],el)
             except IndexError:
                 return False
+
+
+def ljoin(l):
+    r = ""
+    for x in l:
+        if len(r) != 0:
+            r += " "
+        r += x
+    return r
 
 
 def compare(a,b,min=0.31):
@@ -71,4 +83,5 @@ def argmatch(model,tomatch_):
                 r[i][1].append(tomatch.pop(0))
         except IndexError:
             pass
+        r[i][1] = ljoin(r[i][1])
     return r
