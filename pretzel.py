@@ -10,7 +10,7 @@ import readline
 from cmd import Cmd
 
 class Pretzel(Cmd):
-    def __init__(self):
+    def __init__(self,verbose=False):
         self.models = []
         self.prompt = '> '
         self.completekey = None
@@ -18,6 +18,7 @@ class Pretzel(Cmd):
         self.stop = False
         self.stdout = stdout
         self.minsim = 0.34
+        self.verbose = verbose
         print "Loading data... ",
         stdout.flush()
         try:
@@ -62,8 +63,12 @@ class Pretzel(Cmd):
             return
         if cmd[0]=='/':
             if cmd[1:7]=='shell ':
+                if self.verbose:
+                    print "Shell : "+cmd[7:]
                 system(cmd[7:])
             elif cmd[1:8]=='python ':
+                if self.verbose:
+                    print "Python : "+cmd[8:]
                 exec(cmd[8:])
         else:
             print cmd
@@ -83,8 +88,7 @@ class Pretzel(Cmd):
                 if args is not True:
                     # means we have some arguments
                     for arg in args:
-                        itemtmp = itemtmp.replace(arg[0],arg[1])
-                        #itemtmp = itemtmp.replace('arg'+repr(x+1),self.arg_translate(args[x],True))
+                        itemtmp = itemtmp.replace(arg[0],self.arg_translate(arg[1],True))
                 success = True
                 if not recursive:
                     self.execute(itemtmp)
@@ -105,5 +109,5 @@ class Pretzel(Cmd):
         self.arg_translate(user)
         self.flushdb()
 
-p = Pretzel()        
+p = Pretzel()
 p.cmdloop()
